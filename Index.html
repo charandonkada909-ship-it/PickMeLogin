@@ -1,0 +1,101 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PickMe | Employee Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #edf4ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 18px;
+      width: 85%;
+      max-width: 350px;
+      box-shadow: 0 8px 25px #d2def0;
+      text-align: center;
+    }
+    h1 { color: #1263d6; margin-bottom: 5px; }
+    p { color: #65758b; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      margin-top: 14px;
+      border-radius: 9px;
+      font-size: 15px;
+    }
+    input { border: 1px solid #ccd6e4; }
+    button {
+      border: none;
+      background: #1263d6;
+      color: white;
+      font-weight: bold;
+    }
+    #message { font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🚕 PickMe</h1>
+    <p>Your Shift. Our Ride.</p>
+    <h3>Employee Login</h3>
+
+    <form id="loginForm">
+      <input id="email" type="email"
+             placeholder="Employee Email" required>
+      <input id="password" type="password"
+             placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+
+    <p id="message"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const PROJECT_URL = "PASTE_PROJECT_URL_HERE";
+    const PUBLISHABLE_KEY = "PASTE_PUBLISHABLE_KEY_HERE";
+
+    const supabaseClient = window.supabase.createClient(
+      PROJECT_URL,
+      PUBLISHABLE_KEY
+    );
+
+    document.getElementById("loginForm")
+      .addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const message = document.getElementById("message");
+
+        message.textContent = "Signing in...";
+
+        const { error } =
+          await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+
+        if (error) {
+          message.textContent = error.message;
+          message.style.color = "red";
+        } else {
+          message.textContent = "Login successful!";
+          message.style.color = "green";
+        }
+      });
+  </script>
+</body>
+</html>
